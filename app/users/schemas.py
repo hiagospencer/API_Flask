@@ -10,3 +10,7 @@ class UserResponseSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
+    
+class UpdateUserSchema(Schema):
+    name = fields.String(validate=validate.Length(min=2))
+    email = fields.Email()

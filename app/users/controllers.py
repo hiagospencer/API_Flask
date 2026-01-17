@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from marshmallow import ValidationError
 
-from app.users.schemas import CreateUserSchema
+from app.users.schemas import CreateUserSchema, UpdateUserSchema
 from app.users.services import UserService
 
 def list_users():
@@ -29,3 +29,31 @@ def create_user():
         return jsonify({
             "errors": err.messages
         }), 400
+        
+    
+def update_user(user_id: int):
+    try:
+        data = request.get_json()
+        schema = UpdateUserSchema()
+        validated_data = schema.load(data)
+        
+        user = UserService.update_user(user_id, validated_data)
+        
+        return jsonify({
+            "id": user.id,
+            "name": user.name,
+            "email":user.email
+        })
+    except ValidationError as err:
+        return jsonify({"errors": err.messages}),400 
+    
+    except ValueError:
+        return jsonify({"error": "User not found"}), 404
+    
+
+def delete_user(user_id: int):
+    try:
+        UserService.delete_user(user_id)
+        return "", 204
+    except ValueError:
+        return jsonify({"error": "User not found"}), 404
