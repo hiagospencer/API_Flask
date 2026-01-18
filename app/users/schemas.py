@@ -1,16 +1,17 @@
 from marshmallow import Schema, fields, validate
 
+
 class CreateUserSchema(Schema):
-    name = fields.String(
-        required=True, validate=validate.Length(min=2)
-    )
+    name = fields.String(required=True, validate=validate.Length(min=2))
     email = fields.Email(required=True)
-    
+
+
 class UserResponseSchema(Schema):
     id = fields.Int()
     name = fields.Str()
     email = fields.Str()
-    
+
+
 class UpdateUserSchema(Schema):
     name = fields.String(validate=validate.Length(min=2))
     email = fields.Email()
